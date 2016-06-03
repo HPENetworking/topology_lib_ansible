@@ -21,7 +21,6 @@ topology_lib_ansible communication library implementation.
 
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
-import subprocess
 
 
 def init_ansible_control_machine(enode):
@@ -39,11 +38,14 @@ def init_ansible_control_machine(enode):
         re_check_git = enode(cmd_check_git, shell='bash')
         assert 'git' not in re_check_git, \
           "Failed to install git!"
+    # Fetch ansible installation script
     cmd_get_script = "git clone https://github.com/nshinde5486/install-ansible.git"
     re_get_script = enode(cmd_get_script, shell='bash')
     assert 'fatal' not in re_get_script, \
       "Failed to fetch Ansible installation script!"
-    subprocess.call(['. install-ansible/install_ansible.sh'], shell=True)
+    # Execute ansible installation script
+    cmd_run_shell = '. install-ansible/install_ansible.sh'
+    enode(cmd_run_shell, shell='bash')
     # Usually, the library functions use the parameters to build a command that
     # is to be sent to the enode, for example:
     #
